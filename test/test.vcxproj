@@ -141,6 +141,7 @@
   <ItemGroup>
     <ClCompile Include="ClashCheck.cpp" />
     <ClCompile Include="Entry.cpp" />
+    <ClCompile Include="GoustManager.cpp" />
     <ClCompile Include="UIControl.cpp" />
     <ClCompile Include="runApp.cpp" />
   </ItemGroup>
@@ -148,6 +149,7 @@
     <ClInclude Include="ClashCheck.h" />
     <ClInclude Include="Engine.h" />
     <ClInclude Include="Entry.h" />
+    <ClInclude Include="GoustManager.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="UIControl.h" />
   </ItemGroup>

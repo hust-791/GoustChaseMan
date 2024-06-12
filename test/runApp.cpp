@@ -3,11 +3,13 @@
 #include "Entry.h"
 #include "UIControl.h"
 #include "ClashCheck.h"
+#include "GoustManager.h"
 
 using namespace std;
 
 const int FRAMES_PER_SECOND = 20;
 const int SKIP_TICKS = 1000 / FRAMES_PER_SECOND;
+DWORD game_start_time = GetTickCount64();
 DWORD next_game_tick = GetTickCount64();
 
 int sleep_time = 0;
@@ -35,26 +37,21 @@ void onKeyTransition()
 	{
 		Excommond("esc");
 	}
-	else if (GetAsyncKeyState('V') & 0x8000)
-	{
-		Excommond("v");
-	}
 }
 
-
-int main()
+void onInitWindow()
 {
 	srand((unsigned)time(NULL));
 	HWND console = GetConsoleWindow();
-	if (console == NULL) 
-		return 1;
+	if (console == NULL)
+		return;
 
 	HANDLE consoleOut = GetStdHandle(STD_OUTPUT_HANDLE);
-	if (consoleOut == INVALID_HANDLE_VALUE) 
-		return 1;
+	if (consoleOut == INVALID_HANDLE_VALUE)
+		return;
 
 	CONSOLE_CURSOR_INFO cursor_info = { 1, 0 };
-	SetConsoleCursorInfo(consoleOut,&cursor_info);
+	SetConsoleCursorInfo(consoleOut, &cursor_info);
 
 	HWND hwnd = GetForegroundWindow();
 	int cx = GetSystemMetrics(SM_CXSCREEN);            /* 屏幕宽度 像素 */
@@ -67,9 +64,32 @@ int main()
 
 	COORD newSize = { RightWall, BottomWall }; // 控制台窗口的新缓冲区大小
 	SetConsoleScreenBufferSize(consoleOut, newSize); // 设置控制台屏幕缓冲区大小
+}
 
-	std::cout << "START:按V开始游戏"<<endl;
+void preStartGame()
+{
+	std::cout << "START:按V开始游戏" << endl;
 	std::cout << "WASD :上左下右" << endl;
+
+	while (game_is_running)
+	{
+		if (GetAsyncKeyState('V') & 0x8000)
+		{
+			system("cls");
+			Excommond("v");
+			break;
+		}
+		else if (GetAsyncKeyState(VK_ESCAPE) & 0x8000)
+		{
+			Excommond("esc");
+		}
+	}
+}
+
+int main()
+{
+	onInitWindow();
+	preStartGame();
 
 	Self::getInstance();
 
@@ -84,6 +104,8 @@ int main()
 	Goust* a7 = new Goust(Pos(35, 37));
 	Goust* a8 = new Goust(Pos(16, 12));
 
+	bool b = true;
+
 	while (game_is_running)
 	{
 		onKeyTransition();
@@ -96,6 +118,11 @@ int main()
 		if (sleep_time >= 0) 
 		{
 			Sleep(sleep_time);
+		}
+		if (b && GetTickCount64() - game_start_time > 10000)
+		{
+			GoustManager::getInstance().startAllChase();
+			b = false;
 		}
 	}
 }
@@ -115,11 +142,6 @@ void drawWall()
 			{
 				gotoxy(j, i);
 				cout << "墙";
-			}
-			else
-			{
-				gotoxy(j, i);
-				cout << "  ";
 			}
 		}
 	}
@@ -144,6 +166,7 @@ void static esc()
 {
 	exit(0);
 }
+
 
 AutoDoRegisterFunctionBegin
 RegisterFunc("w", forward);

@@ -66,7 +66,7 @@ public:
 	Entry(Pos ps);
 	virtual ~Entry() {};
 	virtual void _Clash(const Entry& ent) {};
-	void UpDataUI();
+	virtual void UpDataUI() {};
 
 	void move(Pos ps);
 	virtual void forward();
@@ -87,9 +87,6 @@ public:
 	int getSpeed() { return m_speed; }
 	int getSpeed() const { return m_speed; }
 
-private:
-
-	virtual void __Descreption();
 
 public:
 	Pos m_pos;
@@ -107,6 +104,7 @@ class Self :public Entry
 {
 public:
 	static Self* getInstance();
+	virtual void UpDataUI() override;
 
 	virtual void _Clash(const Entry& ent) override;
 
@@ -117,7 +115,6 @@ private:
 
 	virtual ~Self();
 
-	virtual void __Descreption() override;
 };
 
 
@@ -126,8 +123,13 @@ class Wall :public Entry
 public:
 	Wall(Pos ps);
 	virtual ~Wall();
-private:
-	virtual void __Descreption() override;
+	virtual void UpDataUI() override;
+};
+
+enum GoustStatus
+{
+	en_Sleep = 0,
+	en_Chase,
 };
 
 class Goust :public Entry
@@ -135,10 +137,12 @@ class Goust :public Entry
 public:
 	Goust(Pos ps);
 	virtual ~Goust();
+	virtual void UpDataUI() override;
 	virtual void _Clash(const Entry& ent) override;
 
 	void Chase();
+	void setStatus(GoustStatus status) { m_status = status; }
+	GoustStatus getStatus() { return m_status; }
 private:
-	virtual void __Descreption() override;
-
+	GoustStatus m_status;
 };

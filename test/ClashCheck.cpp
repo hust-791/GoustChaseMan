@@ -23,7 +23,7 @@ void ClashCheckManager::clashCheck()
 			else
 			{
 				Goust* goust = dynamic_cast<Goust*>(move);
-				if (goust)
+				if (goust && goust->getStatus() == GoustStatus::en_Chase)
 					goust->Chase();
 			}
 		}

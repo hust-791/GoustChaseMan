@@ -2,6 +2,7 @@
 #include "Entry.h"
 #include "UIControl.h"
 #include "ClashCheck.h"
+#include "GoustManager.h"
 
 using namespace std;
 
@@ -28,15 +29,6 @@ Entry::Entry(Pos ps) :m_pos(ps)
 	m_attack = 0;
 	m_speed = 1.0;
 };
-
-void Entry::UpDataUI()
-{
-	goTo(m_Lastpos);
-	cout << "  ";
-	goTo(m_pos);
-	__Descreption();
-	m_Lastpos = DefaultPos;
-}
 
 void Entry::move(Pos ps)
 {
@@ -106,11 +98,6 @@ void Entry::setSpeed(double speed)
 	m_speed = speed;
 }
 
-void Entry::__Descreption()
-{
-	cout << "  ";
-}
-
 
 ////////////////Self////////////////
 
@@ -118,6 +105,15 @@ Self* Self::getInstance()
 {
 	static Self _instance(Pos(1, 1));
 	return &_instance;
+}
+
+void Self::UpDataUI()
+{
+	goTo(m_Lastpos);
+	cout << "  ";
+	goTo(m_pos);
+	cout << "ÎÒ";
+	m_Lastpos = DefaultPos;
 }
 
 void Self::_Clash(const Entry& ent)
@@ -171,10 +167,6 @@ Self::~Self()
 	ClashCheckManager::getInstance().deleteMovingEntry(this);
 }
 
-void Self::__Descreption()
-{
-	cout << "ÎÒ";
-}
 
 
 ////////////////Wall////////////////
@@ -192,9 +184,11 @@ Wall::~Wall()
 	ClashCheckManager::getInstance().deleteStillEntry(this);
 }
 
-void Wall::__Descreption()
+void Wall::UpDataUI()
 {
+	goTo(m_pos);
 	cout << "Ç½";
+	m_Lastpos = DefaultPos;
 }
 
 
@@ -205,17 +199,29 @@ Goust::Goust(Pos ps) :Entry(ps)
 {
 	m_Lastpos = DefaultPos;
 	m_type = EntryType::en_Ghost;
+	m_status = GoustStatus::en_Sleep;
 	setAttack(2);
 	setSpeed(5);
 
 	UIControlManager::getUICtrl().addEntry(this);
 	ClashCheckManager::getInstance().addMovingEntry(this);
+	GoustManager::getInstance().addGoust(this);
 }
 
 Goust::~Goust()
 {
 	UIControlManager::getUICtrl().deleteEntry(this);
 	ClashCheckManager::getInstance().deleteMovingEntry(this);
+	GoustManager::getInstance().deleteGoust(this);
+}
+
+void Goust::UpDataUI()
+{
+	goTo(m_Lastpos);
+	cout << "  ";
+	goTo(m_pos);
+	cout << "¹í";
+	m_Lastpos = DefaultPos;
 }
 
 void Goust::_Clash(const Entry& ent)
@@ -296,9 +302,4 @@ void Goust::Chase()
 			}
 		}
 	}
-}
-
-void Goust::__Descreption()
-{
-	cout << "¹í";
 }
