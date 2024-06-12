@@ -1,9 +1,9 @@
 #pragma once
 
-#define TopWall 0
-#define BottomWall 41
-#define LeftWall 0
-#define RightWall 81
+#define TopWall 0.
+#define BottomWall 41.
+#define LeftWall 0.
+#define RightWall 81.
 
 #define XRange (RightWall -1)
 #define YRange (BottomWall -1)
@@ -14,13 +14,20 @@
 #define DefaultPos Pos(DefaultXpos,DefaultYpos)
 struct Pos
 {
-	int x;
-	int y;
-	Pos(int a, int b) :x(a), y(b) {};
+	double x;
+	double y;
+	Pos(double a, double b) :x(a), y(b) {};
 	Pos() { x = DefaultXpos; y = DefaultYpos; };
+
+
 	bool operator==(const Pos& ps)
 	{
-		return(x == ps.x && y == ps.y);
+		if (x+1 <= ps.x || ps.x +1 <= x)
+			return false;
+		if (y+1 <= ps.y || ps.y +1 <= y)   
+			return false;
+
+		return true;
 	}
 
 	Pos operator-(const Pos& ps)
@@ -39,7 +46,7 @@ struct Pos
 
 void goTo(Pos ps);
 
-void gotoxy(int x, int y);
+void gotoxy(double x, double y);
 
 
 enum class EntryType
@@ -70,10 +77,14 @@ public:
 	void recover(size_t val);
 	void damage(size_t val);
 
-	int getAttack();
-	int getAttack() const;
 	void setAttack(int att);
-					
+	int getAttack() { return m_attack; }
+	int getAttack() const { return m_attack; }
+
+	void setSpeed(double speed);
+	int getSpeed() { return m_speed; }
+	int getSpeed() const { return m_speed; }
+
 private:
 
 	virtual void __Descreption();

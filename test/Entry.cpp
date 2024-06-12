@@ -13,9 +13,9 @@ void goTo(Pos ps)
 	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
 }
 
-void gotoxy(int x, int y) {
+void gotoxy(double x, double y) {
 	COORD coord;
-	coord.X = 2 * x;
+	coord.X = (2 * x);
 	coord.Y = y;
 	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
 }
@@ -49,8 +49,8 @@ void Entry::forward()
 	if (m_pos.y > TopWall + 1)
 	{
 		m_Lastpos = m_pos;
-		//m_pos.y-= m_speed/FRAMES_PER_SECOND;
-		m_pos.y-= 1;
+		m_pos.y -= m_speed / FRAMES_PER_SECOND;
+		//m_pos.y-= 1;
 	}
 }
 
@@ -59,7 +59,7 @@ void Entry::back()
 	if (m_pos.y < BottomWall - 2)
 	{
 		m_Lastpos = m_pos;
-		m_pos.y+= 1;
+		m_pos.y+= m_speed / FRAMES_PER_SECOND;
 	}
 }
 
@@ -68,7 +68,7 @@ void Entry::left()
 	if (m_pos.x > LeftWall + 1)
 	{
 		m_Lastpos = m_pos;
-		m_pos.x -= 1;
+		m_pos.x -= m_speed / FRAMES_PER_SECOND;
 	}
 }
 
@@ -77,7 +77,7 @@ void Entry::right()
 	if (m_pos.x < RightWall - 2)
 	{
 		m_Lastpos = m_pos;
-		m_pos.x += 1;
+		m_pos.x += m_speed / FRAMES_PER_SECOND;
 	}
 }
 
@@ -91,19 +91,14 @@ void Entry::damage(size_t val)
 	m_hp -= (int)val;
 }
 
-int Entry::getAttack()
-{
-	return m_attack;
-}
-
-int Entry::getAttack() const
-{
-	return m_attack;
-}
-
 void Entry::setAttack(int att)
 {
 	m_attack = att;
+}
+
+void Entry::setSpeed(double speed)
+{
+	m_speed = speed;
 }
 
 void Entry::__Descreption()
@@ -159,6 +154,7 @@ Self::Self(Pos ps) :Entry(ps)
 	m_Lastpos = DefaultPos;
 	m_type = EntryType::en_Self;
 	setAttack(1);
+	setSpeed(10);
 
 	UIControlManager::getUICtrl().addEntry(this);
 	ClashCheckManager::getInstance().addMovingEntry(this);
@@ -205,6 +201,7 @@ Goust::Goust(Pos ps) :Entry(ps)
 	m_Lastpos = DefaultPos;
 	m_type = EntryType::en_Ghost;
 	setAttack(2);
+	setSpeed(5);
 
 	UIControlManager::getUICtrl().addEntry(this);
 	ClashCheckManager::getInstance().addMovingEntry(this);

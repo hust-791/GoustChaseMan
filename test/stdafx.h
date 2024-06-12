@@ -12,3 +12,7 @@
 #include <mutex>
 #include <condition_variable>
 
+#pragma warning(disable:4244)
+#pragma warning(disable:4838)
+
+extern const int FRAMES_PER_SECOND;

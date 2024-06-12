@@ -76,9 +76,13 @@ int main()
 	Wall* a = new Wall(Pos(3, 3));
 	Wall* a1 = new Wall(Pos(3, 4));
 	Wall* a2 = new Wall(Pos(3, 5));
-	Goust* a3 = new Goust(Pos(33, 36));
-	Goust* a4 = new Goust(Pos(35, 37));
-	Goust* a5 = new Goust(Pos(16, 12));
+	Wall* a3 = new Wall(Pos(3, 6));
+	Wall* a4 = new Wall(Pos(3, 7));
+	Wall* a5 = new Wall(Pos(3, 8));
+
+	Goust* a6 = new Goust(Pos(33, 36));
+	Goust* a7 = new Goust(Pos(35, 37));
+	Goust* a8 = new Goust(Pos(16, 12));
 
 	while (game_is_running)
 	{
