@@ -15,7 +15,7 @@ void ClashCheckManager::clashCheck()
 	{
 		if (move && Self::getInstance() != move)
 		{
-			if (Self::getInstance()->m_pos == move->m_pos)
+			if (Self::getInstance()->isClash(*move))
 			{
 				Self::getInstance()->_Clash(*move);
 				move->_Clash(*Self::getInstance());
@@ -33,7 +33,7 @@ void ClashCheckManager::clashCheck()
 	{
 		for (auto still : m_stillEntry)
 		{
-			if (move && still && move->m_pos == still->m_pos)
+			if (move && still && move->isClash(*still))
 			{
 				move->_Clash(*still);
 			}

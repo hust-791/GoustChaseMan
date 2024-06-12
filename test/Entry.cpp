@@ -81,6 +81,11 @@ void Entry::right()
 	}
 }
 
+bool Entry::isClash(const Entry& ent)
+{
+	return this->m_pos == ent.m_pos;
+}
+
 void Entry::recover(size_t val)
 {
 	m_hp += (int)val;

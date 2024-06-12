@@ -74,6 +74,8 @@ public:
 	virtual void left();
 	virtual	void right();
 
+	virtual	bool isClash(const Entry& ent);
+
 	void recover(size_t val);
 	void damage(size_t val);
 
