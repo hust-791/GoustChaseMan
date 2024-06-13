@@ -14,26 +14,65 @@ DWORD next_game_tick = GetTickCount64();
 
 int sleep_time = 0;
 bool game_is_running = true;
+void drawWall()
+{
+	for (int i = 0; i < BottomWall; ++i)
+	{
+		for (int j = 0; j < RightWall; ++j)
+		{
+			if (i == 0 || i == BottomWall - 1)
+			{
+				gotoxy(j, i);
+				cout << "墙";
+			}
+			else if (j == 0 || j == RightWall - 1)
+			{
+				gotoxy(j, i);
+				cout << "墙";
+			}
+		}
+	}
+}
+void static forward()
+{
+	Self::getInstance()->forward();
+}
+void static back()
+{
+	Self::getInstance()->back();
+}
+void static left()
+{
+	Self::getInstance()->left();
+}
+void static right()
+{
+	Self::getInstance()->right();
+}
+void static attack()
+{
+	goTo(Self::getInstance()->m_pos);
+	string a = "\033[1;35;47m";
+	string b = "              ";
+	string c = "\033[0m";
+	cout << a + b + c;
+}
+void static esc()
+{
+	exit(0);
+}
 
 void onKeyTransition()
 {
-	if (GetAsyncKeyState('W') & 0x8000)
+	for (int key = 'A'; key <= 'Z'; ++key)
 	{
-		Excommond("w");
+		if (GetAsyncKeyState(key) & 0x8000)
+		{
+			std::string keyStr(1, key);
+			Excommond(keyStr);
+		}
 	}
-	else if (GetAsyncKeyState('S') & 0x8000)
-	{
-		Excommond("s");
-	}
-	else if (GetAsyncKeyState('A') & 0x8000)
-	{
-		Excommond("a");
-	}
-	else if (GetAsyncKeyState('D') & 0x8000)
-	{
-		Excommond("d");
-	}
-	else if (GetAsyncKeyState(VK_ESCAPE) & 0x8000)
+	if (GetAsyncKeyState(VK_ESCAPE) & 0x8000)
 	{
 		Excommond("esc");
 	}
@@ -86,11 +125,28 @@ void preStartGame()
 	}
 }
 
+std::atomic<bool> running(true);
+
+void checkKeyPressed() 
+{
+	while (running) 
+	{
+		for (int key = 'A'; key <= 'Z'; ++key) 
+		{ 
+			if (GetAsyncKeyState(key) & 0x8000) 
+			{ 
+				std::string keyStr(1, key);
+				Excommond(keyStr);
+			}
+		}
+		std::this_thread::sleep_for(std::chrono::milliseconds(10)); // 防止CPU使用率过高
+	}
+}
+
 int main()
 {
 	onInitWindow();
 	preStartGame();
-
 	Self::getInstance();
 
 	Wall* a = new Wall(Pos(3, 3));
@@ -127,52 +183,14 @@ int main()
 	}
 }
 
-void drawWall()
-{
-	for (int i = 0; i < BottomWall; ++i)
-	{
-		for (int j = 0; j < RightWall; ++j)
-		{
-			if (i == 0 || i == BottomWall - 1)
-			{
-				gotoxy(j, i);
-				cout << "墙";
-			}
-			else if (j == 0 || j == RightWall - 1)
-			{
-				gotoxy(j, i);
-				cout << "墙";
-			}
-		}
-	}
-}
-void static forward()
-{
-	Self::getInstance()->forward();
-}
-void static back()
-{
-	Self::getInstance()->back();
-}
-void static left()
-{
-	Self::getInstance()->left();
-}
-void static right()
-{
-	Self::getInstance()->right();
-}
-void static esc()
-{
-	exit(0);
-}
 
 
 AutoDoRegisterFunctionBegin
-RegisterFunc("w", forward);
-RegisterFunc("s", back);
-RegisterFunc("a", left);
-RegisterFunc("d", right);
-RegisterFunc("v", drawWall);
+RegisterFunc("W", forward);
+RegisterFunc("S", back);
+RegisterFunc("A", left);
+RegisterFunc("D", right);
+RegisterFunc("V", drawWall);
+RegisterFunc("J", attack);
 RegisterFunc("esc", esc);
 AutoRegisterFunctionEnd
