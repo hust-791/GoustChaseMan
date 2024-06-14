@@ -11,6 +11,7 @@
 #include <thread>
 #include <mutex>
 #include <condition_variable>
+#include <atomic>
 
 #pragma warning(disable:4244)
 #pragma warning(disable:4838)
