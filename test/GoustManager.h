@@ -13,6 +13,8 @@ public:
 
 	void deleteGoust(Goust* ent);
 
+	std::vector<Goust*> getAllGousts();
+
 	GoustManager(const GoustManager&) = delete;
 	GoustManager& operator=(const GoustManager&) = delete;
 

@@ -5,8 +5,13 @@
 #define LeftWall 0.
 #define RightWall 81.
 
-#define XRange (RightWall -1)
-#define YRange (BottomWall -1)
+#define StatusBarTop (BottomWall + 1)
+#define StatusBarBottom (BottomWall + 10)
+#define StatusBarLeft LeftWall
+#define StatusBarRight RightWall
+
+#define XRange RightWall
+#define YRange StatusBarBottom
 
 #define DefaultXpos (RightWall + 2) 
 #define DefaultYpos (BottomWall - 2)
@@ -24,7 +29,7 @@ struct Pos
 	{
 		if (x+1 <= ps.x || ps.x +1 <= x)
 			return false;
-		if (y+1 <= ps.y || ps.y +1 <= y)   
+		if (y+1 <= ps.y || ps.y +1 <= y)
 			return false;
 
 		return true;
@@ -43,10 +48,11 @@ struct Pos
 	}
 };
 
-
 void goTo(Pos ps);
 
 void gotoxy(double x, double y);
+
+void clearConsoleArea(Pos leftTop, Pos rigthBottom);
 
 
 enum class EntryType
@@ -58,6 +64,15 @@ enum class EntryType
 	en_Medicine,
 	en_Door,
 	en_Key
+};
+
+enum class EntryTowards
+{
+	en_None = 0,
+	en_Forward,
+	en_Back,
+	en_Left,
+	en_Right
 };
 
 class Entry
@@ -87,12 +102,15 @@ public:
 	int getSpeed() { return m_speed; }
 	int getSpeed() const { return m_speed; }
 
+	void setHp(int hp) { m_hp = hp; }
+	int getHp() { return m_hp; }
+	int getHp() const { return m_hp; }
 
 public:
 	Pos m_pos;
 	Pos m_Lastpos;
 	EntryType m_type;
-
+	EntryTowards m_towards;
 private:
 	int m_hp;
 	int m_attack;
