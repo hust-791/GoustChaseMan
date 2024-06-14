@@ -101,7 +101,7 @@ void onInitWindow()
 	SetWindowPos(hwnd, HWND_TOP, 0, 0, cx, cy, 0);
 	SetWindowLong(console, GWL_STYLE, GetWindowLong(console, GWL_STYLE) & ~(WS_VSCROLL)); // 禁止垂直滚动条
 
-	COORD newSize = { RightWall, BottomWall }; // 控制台窗口的新缓冲区大小
+	COORD newSize = { XRange, YRange }; // 控制台窗口的新缓冲区大小
 	SetConsoleScreenBufferSize(consoleOut, newSize); // 设置控制台屏幕缓冲区大小
 }
 
@@ -125,22 +125,24 @@ void preStartGame()
 	}
 }
 
-std::atomic<bool> running(true);
 
-void checkKeyPressed() 
+void UpDataStatusBarUI()
 {
-	while (running) 
-	{
-		for (int key = 'A'; key <= 'Z'; ++key) 
-		{ 
-			if (GetAsyncKeyState(key) & 0x8000) 
-			{ 
-				std::string keyStr(1, key);
-				Excommond(keyStr);
-			}
-		}
-		std::this_thread::sleep_for(std::chrono::milliseconds(10)); // 防止CPU使用率过高
-	}
+	clearConsoleArea(Pos(StatusBarTop, StatusBarLeft), Pos(StatusBarBottom, StatusBarRight));
+
+	int hp  = Self::getInstance()->getHp();
+	string a = "\033[1;35;47m";
+
+	string b = "";
+	for (int i = 0; i < hp; ++i)
+		b += " ";
+	string c = "\033[0m";
+	string d = a + b + c;
+	goTo(Pos(StatusBarLeft + 1, StatusBarTop + 1));
+	cout << d;
+
+	goTo(Pos(StatusBarLeft + 1, StatusBarTop));
+	cout << "HP: " <<Self::getInstance()->getHp();
 }
 
 int main()
@@ -156,9 +158,9 @@ int main()
 	Wall* a4 = new Wall(Pos(3, 7));
 	Wall* a5 = new Wall(Pos(3, 8));
 
-	Goust* a6 = new Goust(Pos(33, 36));
-	Goust* a7 = new Goust(Pos(35, 37));
-	Goust* a8 = new Goust(Pos(16, 12));
+	//Goust* a6 = new Goust(Pos(33, 36));
+	//Goust* a7 = new Goust(Pos(35, 37));
+	//Goust* a8 = new Goust(Pos(16, 12));
 
 	bool b = true;
 
@@ -168,7 +170,7 @@ int main()
 
 		ClashCheckManager::getInstance().clashCheck();
 		UIControlManager::getUICtrl().UpDataGameUI();
-
+		UpDataStatusBarUI();
 		next_game_tick += SKIP_TICKS;
 		sleep_time = next_game_tick - GetTickCount64();
 		if (sleep_time >= 0) 

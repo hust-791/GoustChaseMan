@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "Entry.h"
 #include "ClashCheck.h"
-
+#include "GoustManager.h"
 
 ClashCheckManager& ClashCheckManager::getInstance()
 {
@@ -11,21 +11,17 @@ ClashCheckManager& ClashCheckManager::getInstance()
 
 void ClashCheckManager::clashCheck()
 {
-	for (auto move : m_movingEntry)
+	for (auto goust : GoustManager::getInstance().getAllGousts())
 	{
-		if (move && Self::getInstance() != move)
+		if (goust)
 		{
-			if (Self::getInstance()->isClash(*move))
+			if (Self::getInstance()->isClash(*goust))
 			{
-				Self::getInstance()->_Clash(*move);
-				move->_Clash(*Self::getInstance());
+				Self::getInstance()->_Clash(*goust);
+				goust->_Clash(*Self::getInstance());
 			}
-			else
-			{
-				Goust* goust = dynamic_cast<Goust*>(move);
-				if (goust && goust->getStatus() == GoustStatus::en_Chase)
-					goust->Chase();
-			}
+			else if (goust->getStatus() == GoustStatus::en_Chase)
+				goust->Chase();
 		}
 	}
 

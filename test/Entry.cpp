@@ -21,10 +21,26 @@ void gotoxy(double x, double y) {
 	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
 }
 
+void clearConsoleArea(Pos leftTop, Pos rigthBottom)
+{
+	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+	CONSOLE_SCREEN_BUFFER_INFO csbi;
+	GetConsoleScreenBufferInfo(hConsole, &csbi);
+
+	COORD startPosition = { static_cast<SHORT>(leftTop.y), static_cast<SHORT>(leftTop.x) };
+	DWORD count;
+	DWORD cellCount = (rigthBottom.x - leftTop.x + 1) * csbi.dwSize.X - leftTop.y;
+
+	FillConsoleOutputCharacter(hConsole, ' ', cellCount, startPosition, &count);
+	FillConsoleOutputAttribute(hConsole, csbi.wAttributes, cellCount, startPosition, &count);
+}
+
+
 Entry::Entry(Pos ps) :m_pos(ps)
 {
 	m_Lastpos = DefaultPos;
 	m_type = EntryType::en_None;
+	m_towards = EntryTowards::en_None;
 	m_hp = 10;
 	m_attack = 0;
 	m_speed = 1.0;
@@ -42,7 +58,7 @@ void Entry::forward()
 	{
 		m_Lastpos = m_pos;
 		m_pos.y -= m_speed / FRAMES_PER_SECOND;
-		//m_pos.y-= 1;
+		m_towards = EntryTowards::en_Forward;
 	}
 }
 
@@ -52,6 +68,7 @@ void Entry::back()
 	{
 		m_Lastpos = m_pos;
 		m_pos.y+= m_speed / FRAMES_PER_SECOND;
+		m_towards = EntryTowards::en_Back;
 	}
 }
 
@@ -61,6 +78,7 @@ void Entry::left()
 	{
 		m_Lastpos = m_pos;
 		m_pos.x -= m_speed / FRAMES_PER_SECOND;
+		m_towards = EntryTowards::en_Left;
 	}
 }
 
@@ -70,6 +88,7 @@ void Entry::right()
 	{
 		m_Lastpos = m_pos;
 		m_pos.x += m_speed / FRAMES_PER_SECOND;
+		m_towards = EntryTowards::en_Right;
 	}
 }
 

@@ -37,3 +37,8 @@ void GoustManager::deleteGoust(Goust* ent)
 	if (it != m_goustSet.end())
 		m_goustSet.erase(it);
 }
+
+std::vector<Goust*> GoustManager::getAllGousts()
+{
+	return m_goustSet;
+}
