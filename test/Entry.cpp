@@ -35,7 +35,6 @@ void clearConsoleArea(Pos leftTop, Pos rigthBottom)
 	FillConsoleOutputAttribute(hConsole, csbi.wAttributes, cellCount, startPosition, &count);
 }
 
-
 Entry::Entry(Pos ps) :m_pos(ps)
 {
 	m_Lastpos = DefaultPos;

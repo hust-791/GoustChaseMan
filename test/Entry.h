@@ -29,7 +29,7 @@ struct Pos
 	{
 		if (x+1 <= ps.x || ps.x +1 <= x)
 			return false;
-		if (y+1 <= ps.y || ps.y +1 <= y)   
+		if (y+1 <= ps.y || ps.y +1 <= y)
 			return false;
 
 		return true;

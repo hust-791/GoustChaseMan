@@ -107,8 +107,10 @@ void onInitWindow()
 
 void preStartGame()
 {
-	std::cout << "START:按V开始游戏" << endl;
-	std::cout << "WASD :上左下右" << endl;
+	goTo(Pos((RightWall / 2) - 5, TopWall));
+	std::cout << "START :按V开始游戏";
+	goTo(Pos((RightWall / 2) - 4, TopWall + 1));
+	std::cout << "WASD :上左下右";
 
 	while (game_is_running)
 	{
