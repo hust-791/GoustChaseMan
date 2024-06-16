@@ -20,25 +20,6 @@ void onInitGame()
 	srand((unsigned)time(NULL));
 }
 
-void drawWall()
-{
-	for (int i = 0; i < BottomWall; ++i)
-	{
-		for (int j = 0; j < RightWall; ++j)
-		{
-			if (i == 0 || i == BottomWall - 1)
-			{
-				gotoxy(j, i);
-				cout << "墙";
-			}
-			else if (j == 0 || j == RightWall - 1)
-			{
-				gotoxy(j, i);
-				cout << "墙";
-			}
-		}
-	}
-}
 void static forward()
 {
 	Player::getInstance()->forward();
@@ -111,9 +92,9 @@ void onKeyTransition()
 
 void preStartGame()
 {
-	goTo(Pos((RightWall / 2) - 5, TopWall));
+	goTo(Pos((RightWall / 4) - 5, TopWall));
 	std::cout << "START :按V开始游戏";
-	goTo(Pos((RightWall / 2) - 4, TopWall + 1));
+	goTo(Pos((RightWall / 4) - 4, TopWall + 1));
 	std::cout << "WASD :上左下右";
 
 	while (game_is_running)
@@ -121,7 +102,6 @@ void preStartGame()
 		if (GetAsyncKeyState('V') & 0x8000)
 		{
 			system("cls");
-			Excommond("V");
 			break;
 		}
 		else if (GetAsyncKeyState(VK_ESCAPE) & 0x8000)
@@ -155,7 +135,7 @@ int main()
 		onKeyTransition();
 
 		ClashCheckManager::getInstance().clashCheck();
-		UIControlManager::getUICtrl().UpDataGameUI();
+		UIControlManager::getUICtrl().upDataGameUI();
 
 		next_game_tick += SKIP_TICKS;
 		sleep_time = next_game_tick - GetTickCount64();
@@ -176,7 +156,6 @@ RegisterFunc("W", forward);
 RegisterFunc("S", back);
 RegisterFunc("A", left);
 RegisterFunc("D", right);
-RegisterFunc("V", drawWall);
 RegisterFunc("J", attack);
 RegisterFunc("esc", esc);
 AutoRegisterFunctionEnd

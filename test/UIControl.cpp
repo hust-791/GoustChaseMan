@@ -60,12 +60,12 @@
 	 delete[] m_screenBuffer;
  }
 
-void UIControlManager::UpDataGameUI()
+void UIControlManager::upDataGameUI()
 {
 	__clearScreenBuffer();
 	__drawEntrys();
 	__drawStatusBar();
-
+	__drawMap();
 	static bool exchangeBuffer = true;
 	if (exchangeBuffer)
 		__renderBuffer(m_hOutput);
@@ -129,6 +129,25 @@ void UIControlManager::__drawStatusBar()
 	{
 		m_screenBuffer[StatusBarTop + 3][i].Char.UnicodeChar = posInfo[i];
 		m_screenBuffer[StatusBarTop + 3][i].Attributes = FOREGROUND_WHILE;
+	}
+}
+
+void UIControlManager::__drawMap()
+{
+	for (size_t i = 0; i < RightWall / 2; ++i)
+	{
+		m_screenBuffer[TopWall][2 * i].Char.UnicodeChar = L'ǽ';
+		m_screenBuffer[TopWall][2 * i].Attributes = FOREGROUND_WHILE;
+		m_screenBuffer[BottomWall][2 * i].Char.UnicodeChar = L'ǽ';
+		m_screenBuffer[BottomWall][2 * i].Attributes = FOREGROUND_WHILE;
+	}
+
+	for (size_t i = 1; i < BottomWall; ++i)
+	{
+		m_screenBuffer[i][LeftWall].Char.UnicodeChar = L'ǽ';
+		m_screenBuffer[i][LeftWall].Attributes = FOREGROUND_WHILE;
+		m_screenBuffer[i][RightWall_UI].Char.UnicodeChar = L'ǽ';
+		m_screenBuffer[i][RightWall_UI].Attributes = FOREGROUND_WHILE;
 	}
 }
 

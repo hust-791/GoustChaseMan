@@ -3,12 +3,14 @@
 #define TopWall 0
 #define BottomWall 20
 #define LeftWall 0
-#define RightWall 60
+#define RightWall 45
 
 #define StatusBarTop (BottomWall + 1)
 #define StatusBarBottom (BottomWall + 10)
 #define StatusBarLeft LeftWall
 #define StatusBarRight RightWall
+
+#define RightWall_UI (((RightWall / 2) - 1) * 2)
 
 #define XRange RightWall
 #define YRange StatusBarBottom

@@ -50,7 +50,7 @@ void Entry::forward()
 
 void Entry::back()
 {
-	if (m_pos.y < BottomWall - 2)
+	if (m_pos.y < BottomWall - 1)
 	{
 		m_Lastpos = m_pos;
 		m_pos.y+= m_speed / FRAMES_PER_SECOND;
@@ -60,7 +60,7 @@ void Entry::back()
 
 void Entry::left()
 {
-	if (m_pos.x > LeftWall + 1)
+	if (m_pos.x > LeftWall + 2)
 	{
 		m_Lastpos = m_pos;
 		m_pos.x -= m_speed / FRAMES_PER_SECOND;
@@ -70,7 +70,7 @@ void Entry::left()
 
 void Entry::right()
 {
-	if (m_pos.x < RightWall - 2)
+	if (m_pos.x < RightWall_UI - 2)
 	{
 		m_Lastpos = m_pos;
 		m_pos.x += m_speed / FRAMES_PER_SECOND;
@@ -108,7 +108,7 @@ void Entry::setSpeed(double speed)
 
 Player* Player::getInstance()
 {
-	static Player _instance(Pos(1, 1));
+	static Player _instance(Pos(2, 1));
 	return &_instance;
 }
 

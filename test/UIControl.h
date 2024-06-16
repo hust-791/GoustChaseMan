@@ -6,10 +6,9 @@ class UIControlManager
 public:
 	static UIControlManager& getUICtrl();
 
-	void UpDataGameUI();
+	void upDataGameUI();
 	void addEntry(Entry* ent);
 	void deleteEntry(Entry* ent);
-
 	UIControlManager(const UIControlManager&) = delete;
 	UIControlManager& operator=(const UIControlManager&) = delete;
 
@@ -19,6 +18,7 @@ private:
 	void __clearScreenBuffer();
 	void __drawEntrys();
 	void __drawStatusBar();
+	void __drawMap();
 	void __renderBuffer(HANDLE handle);
 
 	HANDLE m_hOutput, m_hOutBuf;
