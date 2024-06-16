@@ -15,10 +15,10 @@ void ClashCheckManager::clashCheck()
 	{
 		if (goust)
 		{
-			if (Self::getInstance()->isClash(*goust))
+			if (Player::getInstance()->isClash(*goust))
 			{
-				Self::getInstance()->_Clash(*goust);
-				goust->_Clash(*Self::getInstance());
+				Player::getInstance()->_Clash(*goust);
+				goust->_Clash(*Player::getInstance());
 			}
 			else if (goust->getStatus() == GoustStatus::en_Chase)
 				goust->Chase();

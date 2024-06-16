@@ -14,8 +14,15 @@ public:
 	UIControlManager& operator=(const UIControlManager&) = delete;
 
 private:
-	UIControlManager() {}
-	~UIControlManager() {};
+	UIControlManager();
+	~UIControlManager();
+	void __clearScreenBuffer();
+	void __drawEntrys();
+	void __drawStatusBar();
+	void __renderBuffer(HANDLE handle);
 
+	HANDLE m_hOutput, m_hOutBuf;
+	DWORD m_bytes = 0;
+	CHAR_INFO** m_screenBuffer;
 	std::vector<Entry*> m_managerEntrys;
 };

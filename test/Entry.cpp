@@ -21,25 +21,12 @@ void gotoxy(double x, double y) {
 	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
 }
 
-void clearConsoleArea(Pos leftTop, Pos rigthBottom)
-{
-	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-	CONSOLE_SCREEN_BUFFER_INFO csbi;
-	GetConsoleScreenBufferInfo(hConsole, &csbi);
-
-	COORD startPosition = { static_cast<SHORT>(leftTop.y), static_cast<SHORT>(leftTop.x) };
-	DWORD count;
-	DWORD cellCount = (rigthBottom.x - leftTop.x + 1) * csbi.dwSize.X - leftTop.y;
-
-	FillConsoleOutputCharacter(hConsole, ' ', cellCount, startPosition, &count);
-	FillConsoleOutputAttribute(hConsole, csbi.wAttributes, cellCount, startPosition, &count);
-}
-
 Entry::Entry(Pos ps) :m_pos(ps)
 {
 	m_Lastpos = DefaultPos;
 	m_type = EntryType::en_None;
 	m_towards = EntryTowards::en_None;
+	m_name = L' ';
 	m_hp = 10;
 	m_attack = 0;
 	m_speed = 1.0;
@@ -119,22 +106,13 @@ void Entry::setSpeed(double speed)
 
 ////////////////Self////////////////
 
-Self* Self::getInstance()
+Player* Player::getInstance()
 {
-	static Self _instance(Pos(1, 1));
+	static Player _instance(Pos(1, 1));
 	return &_instance;
 }
 
-void Self::UpDataUI()
-{
-	goTo(m_Lastpos);
-	cout << "  ";
-	goTo(m_pos);
-	cout << "ÎÒ";
-	m_Lastpos = DefaultPos;
-}
-
-void Self::_Clash(const Entry& ent)
+void Player::_Clash(const Entry& ent)
 {
 	switch (ent.m_type)
 	{
@@ -168,10 +146,11 @@ void Self::_Clash(const Entry& ent)
 	}
 }
 
-Self::Self(Pos ps) :Entry(ps)
+Player::Player(Pos ps) :Entry(ps)
 {
 	m_Lastpos = DefaultPos;
 	m_type = EntryType::en_Self;
+	m_name = L'ÎÒ';
 	setAttack(1);
 	setSpeed(10);
 
@@ -179,7 +158,7 @@ Self::Self(Pos ps) :Entry(ps)
 	ClashCheckManager::getInstance().addMovingEntry(this);
 }
 
-Self::~Self()
+Player::~Player()
 {
 	UIControlManager::getUICtrl().deleteEntry(this);
 	ClashCheckManager::getInstance().deleteMovingEntry(this);
@@ -192,6 +171,7 @@ Self::~Self()
 Wall::Wall(Pos ps) :Entry(ps)
 {
 	m_type = EntryType::en_Wall;
+	m_name = L'Ç½';
 	UIControlManager::getUICtrl().addEntry(this);
 	ClashCheckManager::getInstance().addStillEntry(this);
 }
@@ -200,13 +180,6 @@ Wall::~Wall()
 {
 	UIControlManager::getUICtrl().deleteEntry(this);
 	ClashCheckManager::getInstance().deleteStillEntry(this);
-}
-
-void Wall::UpDataUI()
-{
-	goTo(m_pos);
-	cout << "Ç½";
-	m_Lastpos = DefaultPos;
 }
 
 
@@ -218,6 +191,7 @@ Goust::Goust(Pos ps) :Entry(ps)
 	m_Lastpos = DefaultPos;
 	m_type = EntryType::en_Ghost;
 	m_status = GoustStatus::en_Sleep;
+	m_name = L'¹í';
 	setAttack(2);
 	setSpeed(5);
 
@@ -231,15 +205,6 @@ Goust::~Goust()
 	UIControlManager::getUICtrl().deleteEntry(this);
 	ClashCheckManager::getInstance().deleteMovingEntry(this);
 	GoustManager::getInstance().deleteGoust(this);
-}
-
-void Goust::UpDataUI()
-{
-	goTo(m_Lastpos);
-	cout << "  ";
-	goTo(m_pos);
-	cout << "¹í";
-	m_Lastpos = DefaultPos;
 }
 
 void Goust::_Clash(const Entry& ent)
@@ -265,7 +230,7 @@ void Goust::_Clash(const Entry& ent)
 
 void Goust::Chase()
 {
-	Pos vec = Self::getInstance()->m_pos - this->m_pos;
+	Pos vec = Player::getInstance()->m_pos - this->m_pos;
 
 	bool b = (rand() % 6 + 1) > 3;
 

@@ -11,9 +11,15 @@ const int FRAMES_PER_SECOND = 20;
 const int SKIP_TICKS = 1000 / FRAMES_PER_SECOND;
 DWORD game_start_time = GetTickCount64();
 DWORD next_game_tick = GetTickCount64();
-
 int sleep_time = 0;
+
 bool game_is_running = true;
+
+void onInitGame()
+{
+	srand((unsigned)time(NULL));
+}
+
 void drawWall()
 {
 	for (int i = 0; i < BottomWall; ++i)
@@ -35,23 +41,23 @@ void drawWall()
 }
 void static forward()
 {
-	Self::getInstance()->forward();
+	Player::getInstance()->forward();
 }
 void static back()
 {
-	Self::getInstance()->back();
+	Player::getInstance()->back();
 }
 void static left()
 {
-	Self::getInstance()->left();
+	Player::getInstance()->left();
 }
 void static right()
 {
-	Self::getInstance()->right();
+	Player::getInstance()->right();
 }
 void static attack()
 {
-	goTo(Self::getInstance()->m_pos);
+	goTo(Player::getInstance()->m_pos);
 	string a = "\033[1;35;47m";
 	string b = "              ";
 	string c = "\033[0m";
@@ -64,45 +70,43 @@ void static esc()
 
 void onKeyTransition()
 {
-	for (int key = 'A'; key <= 'Z'; ++key)
+	//for (int key = 'A'; key <= 'Z'; ++key)
+	//{
+	//	if (GetAsyncKeyState(key) & 0x8000)
+	//	{
+	//		std::string keyStr(1, key);
+	//		Excommond(keyStr);
+	//		break;
+	//	}
+	//}
+	//if (GetAsyncKeyState(VK_ESCAPE) & 0x8000)
+	//{
+	//	Excommond("esc");
+	//}
+	if (GetAsyncKeyState('W') & 0x8000)
 	{
-		if (GetAsyncKeyState(key) & 0x8000)
-		{
-			std::string keyStr(1, key);
-			Excommond(keyStr);
-		}
+		Excommond("W");
 	}
-	if (GetAsyncKeyState(VK_ESCAPE) & 0x8000)
+	else if (GetAsyncKeyState('S') & 0x8000)
+	{
+		Excommond("S");
+	}
+	else if (GetAsyncKeyState('A') & 0x8000)
+	{
+		Excommond("A");
+	}
+	else if (GetAsyncKeyState('D') & 0x8000)
+	{
+		Excommond("D");
+	}
+	else if (GetAsyncKeyState('J') & 0x8000)
+	{
+		Excommond("J");
+	}
+	else if (GetAsyncKeyState(VK_ESCAPE) & 0x8000)
 	{
 		Excommond("esc");
 	}
-}
-
-void onInitWindow()
-{
-	srand((unsigned)time(NULL));
-	HWND console = GetConsoleWindow();
-	if (console == NULL)
-		return;
-
-	HANDLE consoleOut = GetStdHandle(STD_OUTPUT_HANDLE);
-	if (consoleOut == INVALID_HANDLE_VALUE)
-		return;
-
-	CONSOLE_CURSOR_INFO cursor_info = { 1, 0 };
-	SetConsoleCursorInfo(consoleOut, &cursor_info);
-
-	HWND hwnd = GetForegroundWindow();
-	int cx = GetSystemMetrics(SM_CXSCREEN);            /* 屏幕宽度 像素 */
-	int cy = GetSystemMetrics(SM_CYSCREEN);            /* 屏幕高度 像素 */
-	LONG l_WinStyle = GetWindowLong(hwnd, GWL_STYLE);   /* 获取窗口信息 */
-	/* 设置窗口信息 最大化 取消标题栏及边框 */
-	SetWindowLong(hwnd, GWL_STYLE, (l_WinStyle | WS_POPUP | WS_MAXIMIZE) & ~WS_CAPTION & ~WS_THICKFRAME & ~WS_BORDER);
-	SetWindowPos(hwnd, HWND_TOP, 0, 0, cx, cy, 0);
-	SetWindowLong(console, GWL_STYLE, GetWindowLong(console, GWL_STYLE) & ~(WS_VSCROLL)); // 禁止垂直滚动条
-
-	COORD newSize = { XRange, YRange }; // 控制台窗口的新缓冲区大小
-	SetConsoleScreenBufferSize(consoleOut, newSize); // 设置控制台屏幕缓冲区大小
 }
 
 void preStartGame()
@@ -117,7 +121,7 @@ void preStartGame()
 		if (GetAsyncKeyState('V') & 0x8000)
 		{
 			system("cls");
-			Excommond("v");
+			Excommond("V");
 			break;
 		}
 		else if (GetAsyncKeyState(VK_ESCAPE) & 0x8000)
@@ -127,42 +131,22 @@ void preStartGame()
 	}
 }
 
-
-void UpDataStatusBarUI()
-{
-	clearConsoleArea(Pos(StatusBarTop, StatusBarLeft), Pos(StatusBarBottom, StatusBarRight));
-
-	int hp  = Self::getInstance()->getHp();
-	string a = "\033[1;35;47m";
-
-	string b = "";
-	for (int i = 0; i < hp; ++i)
-		b += " ";
-	string c = "\033[0m";
-	string d = a + b + c;
-	goTo(Pos(StatusBarLeft + 1, StatusBarTop + 1));
-	cout << d;
-
-	goTo(Pos(StatusBarLeft + 1, StatusBarTop));
-	cout << "HP: " <<Self::getInstance()->getHp();
-}
-
 int main()
 {
-	onInitWindow();
+	onInitGame();
+
 	preStartGame();
-	Self::getInstance();
 
-	Wall* a = new Wall(Pos(3, 3));
-	Wall* a1 = new Wall(Pos(3, 4));
-	Wall* a2 = new Wall(Pos(3, 5));
-	Wall* a3 = new Wall(Pos(3, 6));
-	Wall* a4 = new Wall(Pos(3, 7));
-	Wall* a5 = new Wall(Pos(3, 8));
+	Player::getInstance();
 
-	//Goust* a6 = new Goust(Pos(33, 36));
-	//Goust* a7 = new Goust(Pos(35, 37));
-	//Goust* a8 = new Goust(Pos(16, 12));
+	for (int i = 0; i < 6; ++i)
+	{
+		new Wall(Pos(5, i + 3));
+	}
+
+	Goust* a6 = new Goust(Pos(10, 10));
+	Goust* a7 = new Goust(Pos(13, 11));
+	Goust* a8 = new Goust(Pos(15, 12));
 
 	bool b = true;
 
@@ -172,7 +156,7 @@ int main()
 
 		ClashCheckManager::getInstance().clashCheck();
 		UIControlManager::getUICtrl().UpDataGameUI();
-		UpDataStatusBarUI();
+
 		next_game_tick += SKIP_TICKS;
 		sleep_time = next_game_tick - GetTickCount64();
 		if (sleep_time >= 0) 
@@ -187,8 +171,6 @@ int main()
 	}
 }
 
-
-
 AutoDoRegisterFunctionBegin
 RegisterFunc("W", forward);
 RegisterFunc("S", back);
@@ -198,3 +180,4 @@ RegisterFunc("V", drawWall);
 RegisterFunc("J", attack);
 RegisterFunc("esc", esc);
 AutoRegisterFunctionEnd
+

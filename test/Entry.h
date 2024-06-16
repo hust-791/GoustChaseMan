@@ -1,9 +1,9 @@
 #pragma once
 
-#define TopWall 0.
-#define BottomWall 41.
-#define LeftWall 0.
-#define RightWall 81.
+#define TopWall 0
+#define BottomWall 20
+#define LeftWall 0
+#define RightWall 60
 
 #define StatusBarTop (BottomWall + 1)
 #define StatusBarBottom (BottomWall + 10)
@@ -13,10 +13,10 @@
 #define XRange RightWall
 #define YRange StatusBarBottom
 
-#define DefaultXpos (RightWall + 2) 
-#define DefaultYpos (BottomWall - 2)
+#define DefaultXpos XRange + 1
+#define DefaultYpos YRange + 1
+#define DefaultPos Pos(DefaultXpos , DefaultYpos)
 
-#define DefaultPos Pos(DefaultXpos,DefaultYpos)
 struct Pos
 {
 	double x;
@@ -52,9 +52,6 @@ void goTo(Pos ps);
 
 void gotoxy(double x, double y);
 
-void clearConsoleArea(Pos leftTop, Pos rigthBottom);
-
-
 enum class EntryType
 {
 	en_None = 0,
@@ -81,7 +78,6 @@ public:
 	Entry(Pos ps);
 	virtual ~Entry() {};
 	virtual void _Clash(const Entry& ent) {};
-	virtual void UpDataUI() {};
 
 	void move(Pos ps);
 	virtual void forward();
@@ -111,6 +107,7 @@ public:
 	Pos m_Lastpos;
 	EntryType m_type;
 	EntryTowards m_towards;
+	wchar_t m_name;
 private:
 	int m_hp;
 	int m_attack;
@@ -118,20 +115,19 @@ private:
 };
 
 
-class Self :public Entry
+class Player :public Entry
 {
 public:
-	static Self* getInstance();
-	virtual void UpDataUI() override;
+	static Player* getInstance();
 
 	virtual void _Clash(const Entry& ent) override;
 
-	Self(const Self&) = delete;
-	Self& operator=(const Self&) = delete;
+	Player(const Player&) = delete;
+	Player& operator=(const Player&) = delete;
 private:
-	Self(Pos ps);
+	Player(Pos ps);
 
-	virtual ~Self();
+	virtual ~Player();
 
 };
 
@@ -141,7 +137,6 @@ class Wall :public Entry
 public:
 	Wall(Pos ps);
 	virtual ~Wall();
-	virtual void UpDataUI() override;
 };
 
 enum GoustStatus
@@ -155,7 +150,6 @@ class Goust :public Entry
 public:
 	Goust(Pos ps);
 	virtual ~Goust();
-	virtual void UpDataUI() override;
 	virtual void _Clash(const Entry& ent) override;
 
 	void Chase();
