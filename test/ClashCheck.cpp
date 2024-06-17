@@ -1,4 +1,4 @@
-#include "stdafx.h"
+﻿#include "stdafx.h"
 #include "Entry.h"
 #include "ClashCheck.h"
 #include "GoustManager.h"

@@ -1,4 +1,4 @@
-#include "stdafx.h"
+Ôªø#include "stdafx.h"
 #include "Entry.h"
 #include "UIControl.h"
 #include "ClashCheck.h"
@@ -150,7 +150,7 @@ Player::Player(Pos ps) :Entry(ps)
 {
 	m_Lastpos = DefaultPos;
 	m_type = EntryType::en_Self;
-	m_name = L'Œ“';
+	m_name = L'Êàë';
 	setAttack(1);
 	setSpeed(10);
 
@@ -171,7 +171,7 @@ Player::~Player()
 Wall::Wall(Pos ps) :Entry(ps)
 {
 	m_type = EntryType::en_Wall;
-	m_name = L'«Ω';
+	m_name = L'Â¢ô';
 	UIControlManager::getUICtrl().addEntry(this);
 	ClashCheckManager::getInstance().addStillEntry(this);
 }
@@ -191,7 +191,7 @@ Goust::Goust(Pos ps) :Entry(ps)
 	m_Lastpos = DefaultPos;
 	m_type = EntryType::en_Ghost;
 	m_status = GoustStatus::en_Sleep;
-	m_name = L'πÌ';
+	m_name = L'È¨º';
 	setAttack(2);
 	setSpeed(5);
 
@@ -285,4 +285,21 @@ void Goust::Chase()
 			}
 		}
 	}
+}
+
+
+
+Buff::Buff(Pos ps):Entry(ps)
+{
+	m_Lastpos = DefaultPos;
+	m_type = EntryType::en_Medicine;
+	m_name = L'ËçØ';
+	UIControlManager::getUICtrl().addEntry(this);
+	ClashCheckManager::getInstance().addStillEntry(this);
+}
+
+Buff::~Buff()
+{
+	UIControlManager::getUICtrl().deleteEntry(this);
+	ClashCheckManager::getInstance().deleteStillEntry(this);
 }

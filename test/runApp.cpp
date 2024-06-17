@@ -1,4 +1,4 @@
-#include "stdafx.h"
+ï»¿#include "stdafx.h"
 #include "Engine.h"
 #include "Entry.h"
 #include "UIControl.h"
@@ -93,9 +93,9 @@ void onKeyTransition()
 void preStartGame()
 {
 	goTo(Pos((RightWall / 4) - 5, TopWall));
-	std::cout << "START :°´V¿ªÊ¼ÓÎÏ·";
+	std::cout << "START :æŒ‰Vå¼€å§‹æ¸¸æˆ";
 	goTo(Pos((RightWall / 4) - 4, TopWall + 1));
-	std::cout << "WASD :ÉÏ×óÏÂÓÒ";
+	std::cout << "WASD :ä¸Šå·¦ä¸‹å³";
 
 	while (game_is_running)
 	{

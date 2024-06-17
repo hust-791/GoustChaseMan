@@ -1,6 +1,6 @@
-#pragma once
+ï»¿#pragma once
 
-//UI¿ØÖÆÀà
+//UIæ§åˆ¶ç±»
 class UIControlManager
 {
 public:

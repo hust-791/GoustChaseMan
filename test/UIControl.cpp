@@ -1,4 +1,4 @@
-#include "stdafx.h"
+﻿#include "stdafx.h"
 #include "Entry.h"
 #include "UIControl.h"
 
@@ -136,17 +136,17 @@ void UIControlManager::__drawMap()
 {
 	for (size_t i = 0; i < RightWall / 2; ++i)
 	{
-		m_screenBuffer[TopWall][2 * i].Char.UnicodeChar = L'ǽ';
+		m_screenBuffer[TopWall][2 * i].Char.UnicodeChar = L'墙';
 		m_screenBuffer[TopWall][2 * i].Attributes = FOREGROUND_WHILE;
-		m_screenBuffer[BottomWall][2 * i].Char.UnicodeChar = L'ǽ';
+		m_screenBuffer[BottomWall][2 * i].Char.UnicodeChar = L'墙';
 		m_screenBuffer[BottomWall][2 * i].Attributes = FOREGROUND_WHILE;
 	}
 
 	for (size_t i = 1; i < BottomWall; ++i)
 	{
-		m_screenBuffer[i][LeftWall].Char.UnicodeChar = L'ǽ';
+		m_screenBuffer[i][LeftWall].Char.UnicodeChar = L'墙';
 		m_screenBuffer[i][LeftWall].Attributes = FOREGROUND_WHILE;
-		m_screenBuffer[i][RightWall_UI].Char.UnicodeChar = L'ǽ';
+		m_screenBuffer[i][RightWall_UI].Char.UnicodeChar = L'墙';
 		m_screenBuffer[i][RightWall_UI].Attributes = FOREGROUND_WHILE;
 	}
 }

@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #define TopWall 0
 #define BottomWall 20
@@ -24,7 +24,7 @@ struct Pos
 	double x;
 	double y;
 	Pos(double a, double b) :x(a), y(b) {};
-	Pos() { x = DefaultXpos; y = DefaultYpos; };
+	Pos() { x = (double)DefaultXpos; y = (double)DefaultYpos; };
 
 
 	bool operator==(const Pos& ps)
@@ -134,12 +134,16 @@ private:
 };
 
 
+
 class Wall :public Entry
 {
 public:
 	Wall(Pos ps);
 	virtual ~Wall();
 };
+
+
+
 
 enum GoustStatus
 {
@@ -159,4 +163,17 @@ public:
 	GoustStatus getStatus() { return m_status; }
 private:
 	GoustStatus m_status;
+};
+
+
+
+
+class Buff :public Entry
+{
+public:
+	Buff(Pos ps);
+	virtual ~Buff();
+	//virtual void _Clash(const Entry& ent) override;
+
+
 };
