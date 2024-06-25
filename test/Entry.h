@@ -1,9 +1,9 @@
 ﻿#pragma once
 
 #define TopWall 0
-#define BottomWall 20
+#define BottomWall 40
 #define LeftWall 0
-#define RightWall 45
+#define RightWall 160
 
 #define StatusBarTop (BottomWall + 1)
 #define StatusBarBottom (BottomWall + 10)
@@ -15,9 +15,17 @@
 #define XRange RightWall
 #define YRange StatusBarBottom
 
-#define DefaultXpos XRange + 1
-#define DefaultYpos YRange + 1
+#define DefaultXpos 2
+#define DefaultYpos 1
 #define DefaultPos Pos(DefaultXpos , DefaultYpos)
+
+struct Size
+{
+	int x;
+	int y;
+	Size() {x = 2; y = 1;}
+	Size(int a,int b):x(a),y(b) {}
+};
 
 struct Pos
 {
@@ -107,6 +115,7 @@ public:
 public:
 	Pos m_pos;
 	Pos m_Lastpos;
+	Size m_size;
 	EntryType m_type;
 	EntryTowards m_towards;
 	wchar_t m_name;

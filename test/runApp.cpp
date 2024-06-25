@@ -18,6 +18,9 @@ bool game_is_running = true;
 void onInitGame()
 {
 	srand((unsigned)time(NULL));
+	HWND consoleWindow = GetConsoleWindow(); // 获取控制台窗口的句柄
+	SetWindowLong(consoleWindow, GWL_STYLE, GetWindowLong(consoleWindow, GWL_STYLE) & ~WS_OVERLAPPEDWINDOW); // 去掉窗口边框
+	ShowWindow(consoleWindow, SW_SHOWMAXIMIZED); // 最大化窗口
 }
 
 void static forward()
@@ -51,40 +54,15 @@ void static esc()
 
 void onKeyTransition()
 {
-	//for (int key = 'A'; key <= 'Z'; ++key)
-	//{
-	//	if (GetAsyncKeyState(key) & 0x8000)
-	//	{
-	//		std::string keyStr(1, key);
-	//		Excommond(keyStr);
-	//		break;
-	//	}
-	//}
-	//if (GetAsyncKeyState(VK_ESCAPE) & 0x8000)
-	//{
-	//	Excommond("esc");
-	//}
-	if (GetAsyncKeyState('W') & 0x8000)
+	for (int key = 'A'; key <= 'Z'; ++key)
 	{
-		Excommond("W");
+		if (GetAsyncKeyState(key) & 0x8000)
+		{
+			std::string keyStr(1, key);
+			Excommond(keyStr);
+		}
 	}
-	else if (GetAsyncKeyState('S') & 0x8000)
-	{
-		Excommond("S");
-	}
-	else if (GetAsyncKeyState('A') & 0x8000)
-	{
-		Excommond("A");
-	}
-	else if (GetAsyncKeyState('D') & 0x8000)
-	{
-		Excommond("D");
-	}
-	else if (GetAsyncKeyState('J') & 0x8000)
-	{
-		Excommond("J");
-	}
-	else if (GetAsyncKeyState(VK_ESCAPE) & 0x8000)
+	if (GetAsyncKeyState(VK_ESCAPE) & 0x8000)
 	{
 		Excommond("esc");
 	}
@@ -128,7 +106,7 @@ int main()
 	Goust* a7 = new Goust(Pos(13, 11));
 	Goust* a8 = new Goust(Pos(15, 12));
 
-	bool b = true;
+	bool b = false;
 
 	while (game_is_running)
 	{

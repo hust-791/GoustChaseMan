@@ -108,7 +108,7 @@ void Entry::setSpeed(double speed)
 
 Player* Player::getInstance()
 {
-	static Player _instance(Pos(2, 1));
+	static Player _instance(Pos(DefaultXpos, DefaultYpos));
 	return &_instance;
 }
 

@@ -3,6 +3,24 @@
 #include "ClashCheck.h"
 #include "GoustManager.h"
 
+
+static bool isClash(const Entry* ent1, const Entry* ent2)
+{
+	int left1 = ent1->m_pos.x;
+	int right1 = left1 + ent1->m_size.x - 1;
+	int top1 = ent1->m_pos.y;
+	int bottom1 = top1 + ent1->m_size.y - 1;
+
+	int left2 = ent2->m_pos.x;
+	int right2 = left2 + ent2->m_size.x - 1;
+	int top2 = ent2->m_pos.y;
+	int bottom2 = top2 + ent2->m_size.y - 1;
+
+	if (left1 > right2 || left2 > right1 || top1 > bottom2 || top2 > bottom1)
+		return false;
+	return true;
+}
+
 ClashCheckManager& ClashCheckManager::getInstance()
 {
 	static ClashCheckManager _instance;
@@ -15,7 +33,7 @@ void ClashCheckManager::clashCheck()
 	{
 		if (goust)
 		{
-			if (Player::getInstance()->isClash(*goust))
+			if (isClash(Player::getInstance(), goust))
 			{
 				Player::getInstance()->_Clash(*goust);
 				goust->_Clash(*Player::getInstance());
@@ -29,7 +47,7 @@ void ClashCheckManager::clashCheck()
 	{
 		for (auto still : m_stillEntry)
 		{
-			if (move && still && move->isClash(*still))
+			if (move && still && isClash(move, still))
 			{
 				move->_Clash(*still);
 			}
